@@ -1,0 +1,15 @@
+CREATE TABLE customer ( security_number CHAR(13), customer_name VARCHAR(18), phone_number CHAR(11), PRIMARY KEY (security_number));
+CREATE TABLE customer_account ( account_id VARCHAR(18), account_name VARCHAR(18), security_number CHAR(13), PRIMARY KEY (account_id), FOREIGN KEY (security_number) REFERENCES customer (security_number) ON DELETE SET NULL);
+CREATE TABLE payment ( payment_id INTEGER, payment_amount INTEGER, payment_date DATETIME, payment_method VARCHAR(18), payment_status VARCHAR(18), account_id VARCHAR(18), PRIMARY KEY (payment_id), FOREIGN KEY (account_id) REFERENCES customer_account (account_id));
+CREATE TABLE shipment_manager ( manager_id INTEGER, manager_name VARCHAR(18), affiliation VARCHAR(18), phone_number CHAR(11), PRIMARY KEY (manager_id));
+CREATE TABLE shipment ( shipment_id INTEGER, manager_id INTEGER, PRIMARY KEY (shipment_id), FOREIGN KEY (manager_id) REFERENCES shipment_manager (manager_id) ON DELETE SET NULL);
+CREATE TABLE recipient ( recipient_id CHAR(13), address VARCHAR(30), PRIMARY KEY (recipient_id));
+CREATE TABLE package_price ( type_of_package VARCHAR(18), weight INTEGER, price INTEGER,PRIMARY KEY (type_of_package, weight));
+CREATE TABLE package ( package_id INTEGER, security_number CHAR(13), shipment_id INTEGER, recipient_id CHAR(13), payment_id INTEGER, type_of_package VARCHAR(18), weight INTEGER,PRIMARY KEY (package_id), FOREIGN KEY (security_number) REFERENCES customer (security_number), FOREIGN KEY (shipment_id) REFERENCES shipment (shipment_id), FOREIGN KEY (recipient_id) REFERENCES recipient (recipient_id), FOREIGN KEY (payment_id) REFERENCES payment (payment_id), FOREIGN KEY (type_of_package, weight) REFERENCES package_price (type_of_package, weight));
+CREATE TABLE information ( package_id INTEGER,type_of_product VARCHAR(18), product_name VARCHAR(18), purpose_of_shipment VARCHAR(18), PRIMARY KEY (package_id), FOREIGN KEY (package_id) REFERENCES package (package_id));
+CREATE TABLE location ( location_id CHAR(6), location_name VARCHAR(30), address VARCHAR(18), PRIMARY KEY (location_id));
+CREATE TABLE transportation ( transportation_id INTEGER, type_of_transportation VARCHAR(18), capacity INTEGER, transportation_status VARCHAR(18), shipment_id INTEGER, PRIMARY KEY (transportation_id, transportation_status, shipment_id), FOREIGN KEY (shipment_id) REFERENCES shipment (shipment_id));
+CREATE TABLE delivery ( tracking_number INTEGER, delivery_status VARCHAR(18), shipment_id INTEGER, location_id VARCHAR(18), transportation_id INTEGER, transportation_status VARCHAR(18), PRIMARY KEY (tracking_number, location_id), FOREIGN KEY (shipment_id) REFERENCES shipment (shipment_id), FOREIGN KEY (transportation_id, transportation_status) REFERENCES transportation (transportation_id, transportation_status), FOREIGN KEY (location_id) REFERENCES location (location_id));
+CREATE TABLE delivery_time ( picked_up_timedate DATETIME, estimated_delivery_timedate DATETIME, timeliness_of_delivery VARCHAR(18), actual_arrival_timedate DATETIME, shipment_id INTEGER, PRIMARY KEY (shipment_id), FOREIGN KEY (shipment_id) REFERENCES shipment (shipment_id));
+
+

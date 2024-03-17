@@ -1,0 +1,13 @@
+drop table delivery_time
+drop table delivery
+drop table transportation
+drop table location
+drop table information
+drop table package
+drop table package_price
+drop table recipient
+drop table shipment
+drop table shipment_manager
+drop table payment
+drop table customer_account
+drop table customer

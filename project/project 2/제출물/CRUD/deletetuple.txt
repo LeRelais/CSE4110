@@ -1,0 +1,13 @@
+delete from delivery_time
+delete from delivery
+delete from transportation
+delete from location
+delete from information
+delete from package
+delete from package_price
+delete from recipient
+delete from shipment
+delete from shipment_manager
+delete from payment
+delete from customer_account
+delete from customer
